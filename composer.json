@@ -1,0 +1,21 @@
+{
+	"name": "Foowie/ImageStorage",
+	"type": "library",
+	"description": "Image storage & latte macros",
+	"keywords": ["nette", "image"],
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+	{
+		"name": "Daniel Robenek"
+	}
+	],
+	"require": {
+		"nette/nette": "@dev",
+		"Foowie/Messaging": "@dev"
+	},
+	"autoload": {
+		"psr-0": {
+			"ImageStorage": "src/"
+		}
+	}	
+}
