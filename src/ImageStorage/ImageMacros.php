@@ -25,12 +25,32 @@ class ImageMacros extends \Nette\Latte\Macros\MacroSet {
 	public static function macroImage(\Nette\Latte\MacroNode $node, \Nette\Latte\PhpWriter $writer) {
 		$text = '$macroImageArgs=%node.array;';
 		$text .= '$macroImageArgs["src"]=$presenter->context->getByType("ImageStorage\ImagePath")->getUrl(%node.word);';
-		$text .= 'if(!array_key_exists("width",$macroImageArgs))$macroImageArgs["width"]=%node.word->width;';
-		$text .= 'if(!array_key_exists("height",$macroImageArgs))$macroImageArgs["height"]=%node.word->height;';
+		$text .= '$macroImageArgs=\ImageStorage\ImageMacros::fixSize($macroImageArgs,%node.word);';
 		$text .= 'echo("<img");';
 		$text .= 'foreach($macroImageArgs as $macroImageKey=>$macroImageValue)if($macroImageValue!==null)echo(" $macroImageKey=\'$macroImageValue\'");';
 		$text .= 'echo(">");'; // xhtml?
 		return $writer->write($text);
+	}
+
+	public static function fixSize(array $params, $image) {
+		if (array_key_exists('size', $params) && $params['size'] == 'fit') {
+			if (!isset($params['width']) || !isset($params['height'])) {
+				throw new \InvalidStateException('Missing width/height!');
+			}
+			if ($params["width"] / $image->width < $params["height"] / $image->height) {
+				$pom = $params["width"] / $image->width;
+			} else {
+				$pom = $params["height"] / $image->height;
+			}
+			$params["width"] = $image->width * $pom;
+			$params["height"] = $image->height * $pom;
+		} else {
+			if (!array_key_exists('width', $params) && !array_key_exists('height', $params)) {
+				$params["width"] = $image->width;
+				$params["height"] = $image->height;
+			}
+		}
+		return $params;
 	}
 
 }
