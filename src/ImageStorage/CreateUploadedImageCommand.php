@@ -18,7 +18,13 @@ class CreateUploadedImageCommand extends \Nette\Object implements \Messaging\ICo
 
 	/** @var int */
 	protected $flags;
-
+	
+	/**
+	 * @param \Nette\Http\FileUpload $upload
+	 * @param type $width
+	 * @param type $height
+	 * @param type $flags - EXACT (crop + resize), FILL (resize to greater size), FIT (resize to lesser size), 
+	 */
 	function __construct(\Nette\Http\FileUpload $upload, $width = null, $height = null, $flags = \Nette\Image::FIT) {
 		$this->upload = $upload;
 		$this->width = $width;
