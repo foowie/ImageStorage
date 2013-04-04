@@ -42,8 +42,8 @@ class ImageMacros extends \Nette\Latte\Macros\MacroSet {
 			} else {
 				$pom = $params["height"] / $image->height;
 			}
-			$params["width"] = $image->width * $pom;
-			$params["height"] = $image->height * $pom;
+			$params["width"] = round($image->width * $pom);
+			$params["height"] = round($image->height * $pom);
 		} else {
 			if (!array_key_exists('width', $params) && !array_key_exists('height', $params)) {
 				$params["width"] = $image->width;
