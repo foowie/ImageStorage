@@ -40,11 +40,15 @@ class CreateImageHandler extends \Nette\Object implements \Messaging\IHandler {
 				throw new \Nette\InvalidStateException('Cant create image directory ' . $path);
 			}
 		}
-
+		
 		if(!$message->getImage()->save($this->imagePath->getPath($imageEntity))) {
 			throw new \Nette\InvalidStateException('Cant save image!');
 		}
 
+		$imageEntity = $this->repository->update($imageEntity->id, array(
+			'size' => filesize($this->imagePath->getPath($imageEntity)),
+		));
+		
 		return $imageEntity->id;
 	}
 
