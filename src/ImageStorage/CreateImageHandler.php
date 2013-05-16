@@ -54,7 +54,11 @@ class CreateImageHandler extends \Nette\Object implements \Messaging\IHandler {
 
 	protected function getFileExtension($fileName, $withDot = false) {
 		$dot = strrpos($fileName, '.');
-		return ($dot === false) ? '' : substr($fileName, $withDot ? $dot : $dot + 1);
+		$ext = \Nette\Utils\Strings::lower(substr($fileName, $dot + 1));
+		if($dot === false || !in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+			$ext = 'jpeg';
+		}
+		return $withDot ? ".$ext" : $ext;
 	}
 
 }
