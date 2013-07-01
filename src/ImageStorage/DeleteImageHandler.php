@@ -31,11 +31,14 @@ class DeleteImageHandler extends \Nette\Object implements \Messaging\IHandler {
 		$imageEntity = $this->repository->find($id);
 
 		if($imageEntity !== false) {
-			$path = $this->imagePath->getPath($imageEntity);
-			if (file_exists($path)) {
-				if (!@unlink($path)) {
-					\Nette\Diagnostics\Debugger::log("Cant delete file $path", \Nette\Diagnostics\Debugger::WARNING);
+			try {
+				$path = $this->imagePath->getPath($imageEntity);
+				if (file_exists($path)) {
+					if (!@unlink($path)) {
+						\Nette\Diagnostics\Debugger::log("Cant delete file $path", \Nette\Diagnostics\Debugger::WARNING);
+					}
 				}
+			} catch(\Nette\InvalidStateException $e) {
 			}
 
 			$this->repository->delete($id);
