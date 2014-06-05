@@ -33,11 +33,11 @@ class ImageMacros extends \Nette\Latte\Macros\MacroSet {
 	}
 
 	public static function fixSize(array $params, $image) {
-		if (array_key_exists('size', $params) && $params['size'] == 'fit') {
+		if (array_key_exists('size', $params) && in_array($params['size'], array('fit', 'fill'))) {
 			if (!isset($params['width']) || !isset($params['height'])) {
 				throw new \InvalidStateException('Missing width/height!');
 			}
-			if ($params["width"] / $image->width < $params["height"] / $image->height) {
+			if (($params["width"] / $image->width < $params["height"] / $image->height) XOR ($params['size'] == 'fill')) {
 				$pom = $params["width"] / $image->width;
 			} else {
 				$pom = $params["height"] / $image->height;
